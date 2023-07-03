@@ -1,6 +1,5 @@
 import traceback
 import time
-from langflow.interface.run import fix_memory_inputs, load_langchain_object
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -13,6 +12,8 @@ from commons.gpt_rating import ask_for_rating
 from database import Prompt as ChatBot
 
 from commons.types import CFPromptResult
+from langflow.processing.process import fix_memory_inputs
+from langflow.interface.run import build_langchain_object
 
 logger = c.get_logger(__name__)
 
@@ -81,7 +82,7 @@ def process_graph(message, chat_history, data_graph):
     # Load langchain object
     logger.debug("Loading langchain object")
     is_first_message = len(chat_history) == 0
-    computed_hash, langchain_object = load_langchain_object(data_graph, True)
+    computed_hash, langchain_object = build_langchain_object(data_graph, True)
     logger.debug("Loaded langchain object")
 
     if langchain_object is None:
