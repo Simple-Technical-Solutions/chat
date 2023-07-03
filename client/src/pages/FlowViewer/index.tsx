@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useContext } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ReactFlow, {
   ReactFlowProvider,
@@ -27,6 +27,7 @@ import {
 import { setComponents, setFuryComponents } from '../../redux/slices/authSlice';
 import FuryFlowViewer, { initialFuryNodes } from '../../components/fury/FuryFlowViewer';
 import { TranslateNodes } from '../../utils';
+import { ChainFuryContext } from '../../App';
 
 export const nodeTypes = { ChainFuryNode: ChainFuryNode };
 export const furyNodeTypes = { FuryEngineNode: FuryEngineNode };
@@ -51,7 +52,7 @@ const FlowViewer = () => {
   const [editBot] = useEditBotMutation();
   const [furyCompDetails] = useFuryComponentDetailsMutation();
   const { auth } = useAuthStates();
-  const [engine, setEngine] = useState('' as '' | 'fury' | 'langchain');
+  const { engine, setEngine } = useContext(ChainFuryContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -194,7 +195,7 @@ const FlowViewer = () => {
   const createChatBot = () => {
     createBot(
       engine === 'langchain'
-        ? { name: botName, nodes, edges, token: auth?.accessToken, engine: engine }
+        ? { name: botName, nodes, edges, token: auth?.accessToken, engine: 'langflow' }
         : {
             name: botName,
             engine: engine,
@@ -316,7 +317,7 @@ const FlowViewer = () => {
             nodes,
             edges,
             token: auth?.accessToken,
-            engine: engine
+            engine: 'langflow'
           }
         : {
             id: flow_id,
