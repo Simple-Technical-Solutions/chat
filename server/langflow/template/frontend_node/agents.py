@@ -232,3 +232,29 @@ class JsonAgentNode(FrontendNode):
 
     def to_dict(self):
         return super().to_dict()
+
+class BabyAGINode(FrontendNode):
+    name: str = "BabyAgiAgent"
+    template: Template = Template(
+        type_name="babyagi_agent",
+        fields=[
+            TemplateField(
+                field_type="VectorStore",
+                required=True,
+                show=True,
+                name="VectorStore",
+            ),
+            TemplateField(
+                field_type="BaseLanguageModel",
+                required=True,
+                show=True,
+                name="llm",
+                display_name="LLM",
+            ),
+        ],
+    )
+    description: str = """Construct a json agent from an LLM and tools."""
+    base_classes: list[str] = ["AgentExecutor"]
+
+    def to_dict(self):
+        return super().to_dict()

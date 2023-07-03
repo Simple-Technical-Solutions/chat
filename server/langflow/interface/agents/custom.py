@@ -315,10 +315,57 @@ class InitializeAgent(CustomAgentExecutor):
 
     def run(self, *args, **kwargs):
         return super().run(*args, **kwargs)
+    
+class BabyAgiAgent(CustomAgentExecutor):
+    """BabyAgi Agent"""
+
+    @staticmethod
+    def function_name():
+        return "BabyAgiAgent"
+
+    @classmethod
+    def initialize(cls, *args, **kwargs):
+        return cls.from_toolkit_and_llm(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def from_toolkit_and_llm(
+        cls,
+        llm: BaseLanguageModel,
+        vectorstoreroutertoolkit: VectorStoreRouterToolkit,
+        **kwargs: Any
+    ):
+        """Construct a vector store router agent from an LLM and tools."""
+
+        tools = (
+            vectorstoreroutertoolkit
+            if isinstance(vectorstoreroutertoolkit, list)
+            else vectorstoreroutertoolkit.get_tools()
+        )
+        prompt = ZeroShotAgent.create_prompt(tools, prefix=VECTORSTORE_ROUTER_PREFIX)
+        llm_chain = LLMChain(
+            llm=llm,
+            prompt=prompt,
+        )
+        tool_names = {tool.name for tool in tools}
+        agent = ZeroShotAgent(
+            llm_chain=llm_chain, allowed_tools=tool_names, **kwargs  # type: ignore
+        )
+        return AgentExecutor.from_agent_and_tools(
+            agent=agent, tools=tools, verbose=True
+        )
+
+    def run(self, *args, **kwargs):
+        return super().run(*args, **kwargs)
+
+
 
 
 CUSTOM_AGENTS = {
     "JsonAgent": JsonAgent,
+    "BabyAgiAgent": BabyAgiAgent,
     "CSVAgent": CSVAgent,
     "AgentInitializer": InitializeAgent,
     "VectorStoreAgent": VectorStoreAgent,
