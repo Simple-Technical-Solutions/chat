@@ -15,7 +15,13 @@ export const nodeColors: { [char: string]: string } = {
   models: '#9CE0FC',
   programatic_actions: '#6344BE',
   builtin_ai: '#EA3852',
-  actions: '#FF9135'
+  actions: '#FF9135',
+  embeddings: '#FF3434',
+  vectorstores: '#FF7496',
+  documentloaders: '#FF9135',
+  textsplitters: '#FF9135',
+  utilities: '#FF9135',
+  retrievers: '#FF9135'
 };
 
 export const nodeNames: { [char: string]: string } = {
@@ -30,7 +36,17 @@ export const nodeNames: { [char: string]: string } = {
   docloaders: 'Document Loader',
   toolkits: 'Toolkits',
   wrappers: 'Wrappers',
-  unknown: 'Unknown'
+  unknown: 'Unknown',
+  actions: 'Actions',
+  embeddings: 'Embeddings',
+  vectorstores: 'Vector Stores',
+  documentloaders: 'Document Loaders',
+  textsplitters: 'Text Splitters',
+  utilities: 'Utilities',
+  retrievers: 'Retrievers',
+  models: 'Models',
+  programatic_actions: 'Programatic Actions',
+  builtin_ai: 'Built-in AI'
 };
 
 export function makeid(length: number) {
